@@ -4,14 +4,22 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { 
-    makeResultData } from './selector'
+    makeResultData,
+    makeResultStrdata,
+    makeResultIsCpy,
+     } from './selector'
 import { 
-    updateResultData } from '../redux/action'
+    updateResultData,
+    updateResultCpy,
+     } from '../redux/action'
+
 
 import Label from '../../components/Label'
+import {Button,Icon} from 'antd'
+import ClipboardJS from 'clipboard'
 
 const Wrapper = styled.div`
-    flex-grow: 1;
+    flex-grow: 2;
     margin: 16px;
 `
 
@@ -33,7 +41,9 @@ const ValueSpan = styled.span`
     color: #0451a5;
 `
 
+
 class Result extends Component {
+
     render() {
         return (
             <Wrapper>
@@ -70,17 +80,41 @@ class Result extends Component {
                         }
                     </ResultWrapper>
                 </Wrapper>
+                <Wrapper>
+                        <Button
+                         onClick={this.handleClick} 
+                         className='cpybtn' 
+                         data-clipboard-text={this.props.resultStrdata}>
+                         复制
+                         </Button>
+                         {
+                             this.props.resultIsCpy ?
+                             <Icon type="check" style={{marginLeft: '16px', color: '#52c41a'}}/> : 
+                             null
+                         }
+                </Wrapper>
             </Wrapper>
         );
+    }
+
+    componentDidMount(){
+        const clipboard = new ClipboardJS('.cpybtn')
+        function callback(e,updateCpy){
+            updateCpy(true)
+        }
+        clipboard.on('success',e => callback(e,this.props.updateResultCpy))
     }
 }
 
 const mapStateToProps = createStructuredSelector({
-    resultData: makeResultData()
+    resultData: makeResultData(),
+    resultStrdata: makeResultStrdata(),
+    resultIsCpy: makeResultIsCpy(),
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateResultData: data => dispatch(updateResultData(data))
+    updateResultData: data => dispatch(updateResultData(data)),
+    updateResultCpy: boolean => dispatch(updateResultCpy(boolean)),
 })
 
 export default connect(

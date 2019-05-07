@@ -8,6 +8,19 @@ const makeResultData = () => createSelector(
     result => result.data
 )
 
+const makeResultStrdata = () => createSelector(
+    selectResult,
+    result => result.strData
+)
+
+const makeResultIsCpy = () => createSelector(
+    selectResult,
+    result => result.isCpy
+)
+
+
 export {
-    makeResultData
+    makeResultData,
+    makeResultStrdata,
+    makeResultIsCpy,
 }

@@ -12,7 +12,9 @@ import {
 import { 
     updateOriginData,
     updateErrorMessage,
-    updateResultData } from '../redux/action'
+    updateResultData,
+    updateResultStrdata,
+    updateResultCpy } from '../redux/action'
 
 const { TextArea } = Input;
 
@@ -27,11 +29,16 @@ class Original extends Component {
         try {
             let data = JSON.stringify(this.stringToJson(this.props.originData),null,2)
 
+            this.props.updateResultStrdata(data)
+
             let arr = data.split('\n')
             
             this.props.updateResultData(arr)
 
             this.props.updateErrorMessage(null)
+
+            this.props.updateResultCpy(false)
+
         } catch (error) {
             this.props.updateErrorMessage(error.message)
         }
@@ -100,7 +107,9 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = dispatch => ({
     updateOriginData: data => dispatch(updateOriginData(data)),
     updateErrorMessage: error => dispatch(updateErrorMessage(error)),
-    updateResultData: data => dispatch(updateResultData(data))
+    updateResultData: data => dispatch(updateResultData(data)),
+    updateResultStrdata: data => dispatch(updateResultStrdata(data)),
+    updateResultCpy: boolean => dispatch(updateResultCpy(boolean))
 })
 
 export default connect(
