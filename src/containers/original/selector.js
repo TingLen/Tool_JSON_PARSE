@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import {initialState} from '../original/reducer'
+import {initialState} from './reducer'
 
 const selectOriginal = state => state.original ||  initialState
 
